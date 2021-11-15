@@ -6,7 +6,7 @@ use CRM_Core2581_ExtensionUtil as E;
 // phpcs:enable
 
 
-function core2581_civicrm_pre($op, $objectName, $id, &$params) {
+function core2581_fixSqlMode($event) {
   $sql = "SET SESSION sql_mode = 'NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION'";
   CRM_Core_DAO::executeQuery($sql);
 }
@@ -18,6 +18,7 @@ function core2581_civicrm_pre($op, $objectName, $id, &$params) {
  */
 function core2581_civicrm_config(&$config) {
   _core2581_civix_civicrm_config($config);
+  Civi::dispatcher()->addListener('civi.dao.preInsert', 'core2581_fixSqlMode');
 }
 
 /**
